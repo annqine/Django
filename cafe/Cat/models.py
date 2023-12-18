@@ -9,6 +9,8 @@ class Table(models.Model):
     width_percent = models.FloatField()
     length_percent = models.FloatField()
 
+    #class Meta: меняет названия в панели админа
+
 class Reservation(models.Model):
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
     date = models.DateField()

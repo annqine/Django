@@ -20,7 +20,7 @@ class Reservation(models.Model):
 
 class Recipe(models.Model):
     title = models.CharField(max_length=255)
-    photo = models.ImageField(upload_to=os.path.join('config', 'menu_photos'), blank=True, null=True)   
+    photo = models.ImageField(upload_to=os.path.join('config', 'menu_photos'))   
     ingredients = models.TextField()
     description = models.TextField()
     recipe = models.TextField()

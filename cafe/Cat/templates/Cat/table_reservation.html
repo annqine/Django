@@ -10,12 +10,11 @@
   <form method="post" action="{% url 'table_reservation' %}"> {% csrf_token %}
       <div class="d-flex align-items-center justify-content-center">
         <label for="date" type="date">Выберите дату:</label>
-        <button class="btn btn-light m-1">&lt;</button>
-        <input type="date"  value="{{ dateToday }}" min="{{ dateToday }}" name="date" required>
-        <button class="btn btn-light m-1">&gt;</button>  
+        <button class="btn btn-light m-1" type="button" onclick="changeDate(-1)">&lt;</button>
+        <input type="date" id="date" value="{{ dateToday }}" min="{{ dateToday }}" name="date" required>
+        <button class="btn btn-light m-1" type="button" onclick="changeDate(1)">&gt;</button>    
         <button type="button" class="btn btn-light" 
-        data-bs-toggle="modal"
-        data-bs-target="#reservationModal"> 
+        onclick="openReservationModal()"> 
         Забронировать
       </button>
       </div>
@@ -41,6 +40,7 @@
           </div>
         </div>
       {% endif%}    
+      
       {% if is_table_available %}
         <div class="modal fade" id="reservationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
@@ -78,4 +78,23 @@
       {% endif %}
   </form>
 </div>
+<script>
+  function changeDate(offset) {
+    var currentDate = new Date(document.getElementById('date').value);
+    currentDate.setDate(currentDate.getDate() + offset);
+    var formattedDate = currentDate.toISOString().slice(0, 10);
+    document.getElementById('date').value = formattedDate;
+  }
+
+  function openReservationModal() {
+    var selectedTables = document.querySelectorAll('input[name="selected_tables"]:checked');
+    
+    if (selectedTables.length > 0) {
+      var modal = new bootstrap.Modal(document.getElementById('reservationModal'));
+      modal.show();
+    } else {
+      alert('Выберите хотя бы один стол перед бронированием.');
+    }
+  }
+</script>
 {% endblock %}

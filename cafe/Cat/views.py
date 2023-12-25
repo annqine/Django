@@ -2,7 +2,8 @@ from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Table, Reservation, Recipe
 import datetime
-
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 def table_reservation(request):
     dateToday = datetime.datetime.today()
@@ -20,9 +21,6 @@ def table_reservation(request):
         print(f"customer_name: {customer_name}")
         print(f"customer_email: {customer_email}")
 
-        # Преобразование значений в список целых чисел
-        selected_tables = [int(table_id) for table_id in selected_tables]
-
         is_table_available = Reservation.objects.filter(table_id__in=selected_tables, date=date).count() == 0
 
         if is_table_available:
@@ -30,13 +28,16 @@ def table_reservation(request):
                 Reservation.objects.create(table_id=table_id, date=date, customer_name=customer_name,
                                            customer_email=customer_email)
 
-            subject = str('Подтверждение бронирования стола')
-            message = f'Уважаемый {customer_name},\n\nВаши столы успешно забронированы на {date}.'
-            from_email = customer_email
-            recipient_list = [customer_email]
+            subject = 'Подтверждение бронирования стола'
+
+            html_message = render_to_string('email.html', {
+                'customer_name': customer_name,
+                'date': date,
+                'selected_tables': selected_tables,
+            })
 
             try:
-                send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+                send_mail(subject, strip_tags(html_message), customer_email, [customer_email], fail_silently=False, html_message=html_message)
                 print("Sending mail")
                 return redirect('success_page')
             except Exception as e:
@@ -54,7 +55,6 @@ def table_reservation(request):
     }
 
     return render(request, 'Cat/table_reservation.html', context)
-
 
 
 def success_page(request):

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение бронирования стола</title>
+</head>
+<body>
+    <h2>Уважаемый посетитель {{ customer_name }},</h2>
+    <p>Ваши стол/ы успешно забронированы на {{ date }}. Выбранные столы:</p>
+    
+    <ul>
+        {% for table_id in selected_tables %}
+            <li>Стол №{{ table_id }}</li>
+        {% endfor %}
+    </ul>
+
+    <p>Мы ждем вас!</p>
+</body>
+</html>

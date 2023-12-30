@@ -22,15 +22,22 @@
         <div class="container text-center">
           {% for table in tables %}
             <figure class="figure col-md-3 col-sm-4 m-3 p-2 shadow bg-body-tertiary rounded">
-            <img src="https://picsum.photos/200" class="figure-img img-fluid rounded" alt="...">
-            <figcaption class="figure-caption">
-              <p>Номер стола: {{ table.number }}</p>
-              <p>Количество мест: {{ table.seats }}</p>
-              <input type="checkbox" class="btn-check" name="selected_tables" id="selected_table_{{ table.id }}" value="{{ table.id }}" require>
-              <label class="btn btn-outline-secondary" for="selected_table_{{ table.id }}">Выбрать</label>
-            </figcaption>
+                <img src="https://picsum.photos/200" class="figure-img img-fluid rounded" alt="...">
+                <figcaption class="figure-caption">
+                    <p>Номер стола: {{ table.number }}</p>
+                    <p>Количество мест: {{ table.seats }}</p>
+                    {% with table_id=table.id %}
+                        {% if table_id in reserved_tables %}
+                            <p class="text-danger">Стол {{ table_id }} забронирован на выбранную дату</p>
+                        {% else %}
+                            <input type="checkbox" class="btn-check" name="selected_tables" id="selected_table_{{ table_id }}" value="{{ table_id }}">
+                            <label class="btn btn-outline-secondary" for="selected_table_{{ table_id }}">Выбрать</label>
+                        {% endif %}
+                    {% endwith %}
+                </figcaption>
             </figure>
-          {% endfor %}
+        {% endfor %}
+
         </div>
       {% else %}
         <div class="alert alert-danger d-flex align-items-center" role="alert">

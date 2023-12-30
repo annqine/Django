@@ -1,0 +1,37 @@
+{% extends 'Cat/base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center">
+  <form method="post" class="col-md-3" action="{% url 'login' %}">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      {{ form.username.label_tag }}
+      <input type="{{ form.username.field.widget.input_type }}"
+         name="{{ form.username.name }}"
+         maxlength="{{ form.username.field.max_length }}"
+         class="form-control"
+         {% if form.username.field.required %}required{% endif %}>
+      {{ form.username.errors }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.password.label_tag }}
+      <input type="{{ form.password.field.widget.input_type }}"
+         name="{{ form.password.name }}"
+         maxlength="{{ form.password.field.max_length }}"
+         class="form-control"
+         {% if form.password.field.required %}required{% endif %}>
+      {{ form.password.errors }}
+    </div>
+
+    <button class="btn btn-outline-secondary" type="submit">Login</button>
+    <a class="btn btn-outline-secondary" href="{% url 'register' %}">Register</a>
+  </form>
+</div>
+{% endblock %}

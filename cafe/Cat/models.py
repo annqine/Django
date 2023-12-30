@@ -1,5 +1,5 @@
-from datetime import timezone
 from django.db import models
+from django.contrib.auth.models import User
 import os
 
 class Table(models.Model):
@@ -27,7 +27,6 @@ class Recipe(models.Model):
 
     
     def get_ingredients_list(self):
-        # Возвращает список ингредиентов, разделенных по новой строке
         return [ingredient.strip() for ingredient in self.ingredients.split('\n') if ingredient.strip()]
 
     def __str__(self):
